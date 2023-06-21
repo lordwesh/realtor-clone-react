@@ -5,9 +5,9 @@ import OAuth from "../components/OAuth";
 import {getAuth, createUserWithEmailAndPassword, updateProfile,} from 
 "firebase/auth";
 import { db } from "../firebase";
-import { doc, serverTimestamp } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import {toast} from "react-toastify"
+import {toast} from "react-toastify";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,6 +40,8 @@ export default function SignUp() {
       delete formDataCopy.password
       formDataCopy.timestamp = serverTimestamp
       ();
+
+     await setDoc(doc(db, "users", user.uid), formDataCopy) 
       toast.success("Sign up was successful")
       navigate("/");
     } catch (error) {
